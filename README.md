@@ -15,6 +15,6 @@ Task 2: Use Aruco to estimate the pose
 
   Progress: 
   
-    1) camera calibration (finished)
+    1) camera calibration (finished), under the folder "camera calibration"
   
     2) Aruco code (on going)
