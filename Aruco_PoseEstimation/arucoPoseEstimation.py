@@ -24,10 +24,12 @@ cameraMatrix = np.array([[fx, 0, cx],
                          [0, 0, 1]])
 dist = np.array([k1, k2, p1, p2, k3])
 
+camera = cv2.VideoCapture(1)
+
 
 def DetectArucoPose():
-    frames = cv2.VideoCapture(0)
-    color_image = np.asanyarray(frames)
+    ret, frame = camera.read()
+    color_image = cv2.resize(frame, (640, 480))
     h1, w1 = color_image.shape[:2]
     newCameraMatrix, roi = cv2.getOptimalNewCameraMatrix(cameraMatrix, dist, (h1, w1), 0, (h1, w1))
     frame = cv2.undistort(color_image, cameraMatrix, dist, None, newCameraMatrix)
@@ -39,12 +41,12 @@ def DetectArucoPose():
 
     if ids is not None:
         rvec, tvec, _ = aruco.estimatePoseSingleMarkers(corners, 0.05, cameraMatrix, dist)
-        for i in range (rvec.shape[0]):
+        for i in range(rvec.shape[0]):
             tvecCopy = tvec[i, :, :] + [10, 0, 0]
             aruco.drawAxis(frame, cameraMatrix, dist, rvec[i, :, :], tvec[i, :, :], 0.03)
             aruco.drawDetectedMarkers(frame, corners, ids)
             # print("rvec[", i, ",: , ：]: ", rvec[i, :, :])
-        cv2.imshow("arucoDetector", frame)
+    cv2.imshow("arucoDetector", frame)
 
 
 while True:
