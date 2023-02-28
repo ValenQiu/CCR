@@ -3,6 +3,7 @@ import numpy as np
 import cv2.aruco as aruco
 import math
 
+# 6X6
 # Base ID:
 base_id = 99
 # Track ID:

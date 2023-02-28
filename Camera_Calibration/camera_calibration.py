@@ -54,31 +54,31 @@ ret, mtx, dist, rvecs, tvecs = \
 
 
 print("ret:",ret  )
-print("mtx:\n",mtx)      # 内参数矩阵
-print("dist:\n",dist   )   # 畸变系数   distortion cofficients = (k_1,k_2,p_1,p_2,k_3)
-print("rvecs:\n",rvecs)   # 旋转向量  # 外参数
-print("tvecs:\n",tvecs  )  # 平移向量  # 外参数
+print("mtx:\n",mtx)      # camera matrix
+print("dist:\n",dist   )   # distortion cofficients = (k_1,k_2,p_1,p_2,k_3)
+print("rvecs:\n",rvecs)   # Rotation Vector  # 外参数
+print("tvecs:\n",tvecs  )  # Rranslation vector  # 外参数
 newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (u, v), 0, (u, v))
-print('newcameramtx外参',newcameramtx)
+print('newcameramtx',newcameramtx)
 # Open Camera
 camera=cv2.VideoCapture(0)
 while True:
     (grabbed,frame)=camera.read()
     h1, w1 = frame.shape[:2]
     newcameramtx, roi = cv2.getOptimalNewCameraMatrix(mtx, dist, (u, v), 0, (u, v))
-    # 纠正畸变
+    # Correct distortion
     dst1 = cv2.undistort(frame, mtx, dist, None, newcameramtx)
     #dst2 = cv2.undistort(frame, mtx, dist, None, newcameramtx)
     mapx,mapy=cv2.initUndistortRectifyMap(mtx,dist,None,newcameramtx,(w1,h1),5)
     dst2=cv2.remap(frame,mapx,mapy,cv2.INTER_LINEAR)
-    # 裁剪图像，输出纠正畸变以后的图片
+    # Cut image, output the corrected image
     x, y, w1, h1 = roi
     dst1 = dst1[y:y + h1, x:x + w1]
 
     #cv2.imshow('frame',dst2)
     #cv2.imshow('dst1',dst1)
     cv2.imshow('dst2', dst2)
-    if cv2.waitKey(1) & 0xFF == ord('q'):  # 按q保存一张图片
+    if cv2.waitKey(1) & 0xFF == ord('q'):  # Press Q to save a photo
         cv2.imwrite("../u4/frame.jpg", dst1)
         break
 
