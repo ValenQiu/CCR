@@ -1,5 +1,4 @@
 import cv2
-import cv2.aruco
 import numpy as np
 import cv2.aruco as aruco
 import math
@@ -119,6 +118,7 @@ while True:
     if key & 0xFF == ord('q') or key == 27:
         break
     arucoIdentify()
-    print("relativervec\n", relativervec)
-    print("relativetvec\n", relativetvec)
+    if relativervec is not None:
+        print("relativervec\n", relativervec)
+        print("relativetvec\n", relativetvec)
     # arucoIdentify()
