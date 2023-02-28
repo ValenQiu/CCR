@@ -3,6 +3,7 @@ import numpy.matlib
 import math
 from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
 # for testing
 datasize_x = 255
@@ -152,7 +153,7 @@ def find_tension():
 
     e = P_desire - X_end
     e_dot = Pd_desire - Xd_end
-
+    # print(TT_det)
     return TT_det
 
 
@@ -251,8 +252,8 @@ def applyDynamicBDFalpha():
         ush[i+1][j] = c1*us[i][j] + c2*us[i-1][j]+d1*ust[i][j]
         qh[i+1][j] = c1*q[i][j] + c2*q[i-1][j]+d1*qt[i][j]
         wh[i+1][j] = c1*w[i][j] + c2*w[i-1][j]+d1*wt[i][j]
-        q[i+1][j] = np.mat([[0],[0],[0]])
-        w[i+1][j] = np.mat([[0],[0],[0]])
+        q[i+1][j] = np.mat([[0], [0], [0]])
+        w[i+1][j] = np.mat([[0], [0], [0]])
 
 
 def dynamicODE(p, R, n, m, q, w, j):
@@ -376,40 +377,46 @@ def dynamicIVP(g):
     E_out = np.zeros(6)
     for k in range(0, 6):
         E_out[k] = E[k]
+        # print(E_out)
     return E_out
 
 
-def visualize1():
-    for j in range(0,N-1):
-        x[j] = p[i][j][0]
-        y[j] = p[i][j][1]
-        z[j] = p[i][j][2]
-        plt.plot(z,x)
+def getYY_element(YY,num):
+    YY_return = []
+    for k in range(0, len(YY)):
+#         print(YY[k][num])
+        if YY[k][num] is not None:
+            YY_return.append(float(YY[k][num]))
+#             print()
+#     print(YY_return)
+    return YY_return
 
 
-def visualize():
-    if i%1 == 0:
-        plt.cla()
-        for j in range(0,N-1):
+def animate(j):
+    if i % 1 == 0:
+        for j in range(0, N - 1):
             x[j] = p[i][j][0]
             y[j] = p[i][j][1]
             z[j] = p[i][j][2]
-        plt.figure(1)
-        plt.plot(z,x)
-        plt.axis([-0.5*L, 1.1*L , -(0.1/0.3)*L, (0.3/0.3)*L])
-        plt.xlabel("z (m)")
-        plt.ylabel("x (m)")
-        plt.pause(0.0005)
-        plt.show()
+        plt.cla()
+        plt.plot(z, x, label='figure 1')
+        plt.tight_layout()
 
 
 # main simulation
 i = 0
+
+# # initialize plotting
+# fig, ax = plt.subplots()
+# plt.axis([-0.5*L, 1.1*L , -(0.1/0.3)*L, (0.3/0.3)*L])
+# plt.xlabel("z (m)")
+# plt.ylabel("x (m)")
+
 fsolve(staticIVP, np.zeros((6, 1)))
 applyStaticBDFalpha()
 f = 1
 
-for i in range(1, STEPS - 1):
+for i in range(1, STEPS-1):
     if i < 2:
         Tt1 = 0
         Tt2 = 0
@@ -423,7 +430,9 @@ for i in range(1, STEPS - 1):
     x0 = np.concatenate((n[i - 1][0], m[i - 1][0]), axis=0)
     fsolve(dynamicIVP, x0)
     applyDynamicBDFalpha()
-    visualize()
+
+    # ani = FuncAnimation(fig, animate, interval=100)
+    # plt.show()
 
     if i < 2:
         e[0] = 0
@@ -431,30 +440,39 @@ for i in range(1, STEPS - 1):
         TT = 0
 
     YY[i - 1] = [(i - 2) * dt, TT, p[i][N - 1][0], p[i - 1][N - 1][2], e[0], e_dot[0], Tt1]
-    p[i - 1][N - 1]  # ?
+    print(p[i-1][N-2][0])  # ?
     f = f + 1
 
+# visualize()
+#     print(YY)
+t_s = getYY_element(YY,0)
+x_m = getYY_element(YY,2)
+z_m = getYY_element(YY,3)
+Tension = getYY_element(YY,6)
+e_m = getYY_element(YY,4)
 #     print(YY)
 plt.figure(2)
-plt.plot(YY[0:STEPS - 1][1], YY[0:STEPS - 1][3], '.-')
+plt.plot(t_s,x_m,'.-')
 plt.xlabel("t (s)")
 plt.ylabel("x (m)")
 plt.title("Tip Displacement - X Component")
 
 plt.figure(3)
-plt.plot(YY[0:STEPS - 1][1], YY[0:STEPS - 1][4], '.-')
+plt.plot(t_s,z_m,'.-')
 plt.xlabel("t (s)")
 plt.ylabel("z (m)")
 plt.title("Tip Displacement - Z Component")
 
 plt.figure(4)
-plt.plot(YY[0:STEPS - 1][1], YY[0:STEPS - 1][7], '.-')
+plt.plot(t_s,Tension,'.-')
 plt.xlabel("t (s)")
 plt.ylabel("Tension")
 
 plt.figure(5)
-plt.plot(YY[0:STEPS - 1][1], YY[0:STEPS - 1][5], '.-')
+plt.plot(t_s,e_m,'.-')
 plt.xlabel("t (s)")
 plt.ylabel("e(m)")
 
 plt.show()
+
+print(p)
