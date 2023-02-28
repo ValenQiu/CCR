@@ -2,8 +2,10 @@
 
 The code `relativePose.py` is the class for using arUco code to estimate the pose.
 
-Setup:
-Two markers, with different ID. When using the code, make sure the IDs of the base and the tracked marker is the same with the markers you use.
+Using two markers, with different ID. 
+The marker can be downloaded with the link: https://chev.me/arucogen/
+
+When using the code, make sure the IDs of the base and the tracked marker is the same with the markers you use.
 ```    
     # Base ID:
     base_id = 99
