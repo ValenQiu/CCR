@@ -106,7 +106,8 @@ def arucoIdentify():
         # print("rotational Vectors\n", rotationVec)
         # print("transfer Vector", transferVec)
         if all(rotationalVector is not None for rotationalVector in rotationVec):
-            relativervec, relativetvec = relativePosion(rotationVec[0], transferVec[0], rotationVec[1], rotationVec[1])
+            # print(transferVec)
+            relativervec, relativetvec = relativePosion(rotationVec[0], transferVec[0], rotationVec[1], transferVec[1])
             # print("relativervec\n", relativervec)
             # print("relativetvec\n", relativetvec)
             # print("type of relativervec: ", type(rotationVec))
