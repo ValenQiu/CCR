@@ -1,4 +1,4 @@
-# Mitacs
+# Collaborative Continuum Robot
 Task 1: Converting MATLAB code into Python
 
   Under the file `controller_v2.ipynb`
