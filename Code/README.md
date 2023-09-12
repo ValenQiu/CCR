@@ -6,11 +6,11 @@
 
 Hardwares:
 
-    Pressure Sensor: `HX710`
+* Pressure Sensor: `HX710`
   
-    Solenoid Valve
+* Solenoid Valve
   
-    12V/6V Air Pump
+* 12V/6V Air Pump
   
 
 #### Continuum Robot Position Control
