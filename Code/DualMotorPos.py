@@ -25,9 +25,8 @@ DXL_MAXIMUM_POSITION_VALUE  = 3000            # and this value (note that the Dy
 DXL_MOVING_STATUS_THRESHOLD = 20                # Dynamixel moving status threshold
 
 
-def cal_position1():
+def cal_position1(current_time):
     # Get the current time in seconds
-    current_time = time.time()
 
     # Adjust the frequency by multiplying time by a scaling factor (2*pi) for 10-second frequency
     frequency = 1.0 / 10.0  # 10 seconds per cycle
@@ -46,12 +45,11 @@ def cal_position1():
         pos = pos_max
     if pos < pos_min:
         pos = pos_min
+    print("position 1: ")
     print(pos)
     return pos
 
-def cal_position2():
-    # Get the current time in seconds
-    current_time = time.time()
+def cal_position2(current_time):
 
     # Adjust the frequency by multiplying time by a scaling factor (2*pi) for 10-second frequency
     frequency = 1.0 / 10.0  # 10 seconds per cycle
@@ -60,7 +58,7 @@ def cal_position2():
     amplitude = 3000  # Adjust this value to control the amplitude of the sine wave
     offset = 0  # Adjust this value to control the vertical position of the sine wave
 
-    pos = amplitude * np.cos(angle) + offset
+    pos = amplitude * np.sin(angle+np.pi/2) + offset
 
     # Optional: Clamp the position within a certain range
     pos_max = 3000
@@ -70,6 +68,7 @@ def cal_position2():
         pos = pos_max
     if pos < pos_min:
         pos = pos_min
+    print("position 2: ")
     print(pos)
     return pos
 
@@ -139,9 +138,10 @@ elif dxl_error != 0:
 time.sleep(3)
 
 while 1:
-    dxl_goal_position1 = cal_position1()
+    current_time = time.time()
+    dxl_goal_position1 = cal_position1(current_time)
     dxl_goal_position1 = int(dxl_goal_position1)
-    dxl_goal_position2 = cal_position2()
+    dxl_goal_position2 = cal_position2(current_time)
     dxl_goal_position2 = int(dxl_goal_position2)
 
     # Write Dynamixel#1 goal position
