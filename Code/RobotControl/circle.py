@@ -14,7 +14,7 @@ controller = Controller(port)
 # This code is aim to let the robt to draw a circle in a 2D plane
 omega = np.linspace(0, 2*np.pi, 100)
 A1 = 500       # amplitude of the segment 1's circle, represents the radius of segment 1
-A2 = 357        # amplitude of the segment 2's circle, represents the radius of segment 2
+A2 = 500        # amplitude of the segment 2's circle, represents the radius of segment 2
 x1 = A1 * np.cos(omega)
 y1 = A1 * np.sin(omega)
 x2 = A2 * np.cos(omega)
@@ -32,7 +32,7 @@ speed = 200
 # initial the position
 controller.set_servo_position(m1x, 1000, speed)
 controller.set_servo_position(m1y, 500, speed)
-controller.set_servo_position(m2x, 857, speed)
+controller.set_servo_position(m2x, 1000, speed)
 controller.set_servo_position(m2y, 500, speed)
 time.sleep(3)
 
