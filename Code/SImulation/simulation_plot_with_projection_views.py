@@ -247,6 +247,6 @@ ani = FuncAnimation(fig, update, frames=num_frames, init_func=init, interval=100
 plt.show()
 
 # Save as GIF
-ani.save('circle.gif', writer=PillowWriter(fps=15))
+# ani.save('circle.gif', writer=PillowWriter(fps=15))
 # # Save as MP4
 # ani.save('circle.mp4', writer=FFMpegWriter(fps=15))
